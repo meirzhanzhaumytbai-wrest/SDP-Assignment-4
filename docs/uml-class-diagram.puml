@@ -1,0 +1,157 @@
+@startuml uml-class-diagram
+title University Registration - Facade over a three-stage chain (A -> B -> C)
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam packageStyle rectangle
+skinparam ranksep 40
+skinparam nodesep 25
+
+package "app  (client side)" #F5F5F5 {
+  class RegistrationCli <<client>> {
+    +main(args)
+  }
+  class RegistrationSystem <<composition root>> {
+    +open(dir): RegistrationSystem
+    +registration(): RegistrationFacade
+    +admin(): RegistrationAdminFacade
+  }
+}
+
+package "facade" #E8F0FE {
+  class RegistrationFacade {
+    +register(RegistrationRequest): RegistrationReceipt
+    +recoverInterruptedChains(): List<RecoveryReport>
+  }
+  class RegistrationAdminFacade {
+    +listChains()
+    +inspect(chainId): ChainInspection
+    +compensate(chainId): ChainRecord
+    +setSectionCapacity() / setCreditLimit() / ...
+  }
+  class ChainCompensator <<package-private>> {
+    ~compensate(reference): List<Stage>
+  }
+  class ChainRecord {
+    id, studentId, courseId, term
+    status: ChainStatus
+    clearanceId, reservationId, invoiceId
+    failedStage, failureReason, undoneSteps
+  }
+  enum ChainStatus {
+    STARTED
+    PENDING_B
+    PENDING_C
+    COMPLETED
+    COMPENSATING
+    COMPENSATED
+    REJECTED
+  }
+  enum Stage {
+    A
+    B
+    C
+  }
+  class ChainLogRepository <<gateway>> {
+    +save(ChainRecord)
+    +findInterrupted()
+  }
+  class RegistrationException {
+    kind: INVALID_REQUEST | REJECTED |
+    COMPENSATED | COMPENSATION_INCOMPLETE
+  }
+}
+
+package "eligibility  (subsystem A)" #E6F4EA {
+  class EligibilityService {
+    +clear(ref, student, course, term)
+    +consume(ref)
+    +revoke(ref): boolean
+  }
+  class PrerequisiteChecker <<pure logic>>
+  class FinancialHoldChecker <<pure logic>>
+  class EligibilityClearance <<entity>> {
+    status: CLEARED | CONSUMED | REVOKED
+    +consume()
+    +revoke()
+  }
+  class EligibilityRepository <<gateway>>
+}
+
+package "seating  (subsystem B)" #FEF7E0 {
+  class SeatingService {
+    +allocate(ref, student, course, term)
+    +confirm(ref)
+    +release(ref): boolean
+  }
+  class SeatAllocationPolicy <<pure logic>>
+  class SeatReservation <<entity>> {
+    status: HELD | CONFIRMED | RELEASED
+    +confirm()
+    +release()
+  }
+  class SeatRepository <<gateway>>
+}
+
+package "finalization  (subsystem C)" #FCE8E6 {
+  class FinalizationService {
+    +finalizeRegistration(ref, student, course, term)
+    +voidRegistration(ref): boolean
+  }
+  class TuitionCalculator <<pure logic>>
+  class Invoice <<entity>> {
+    status: ISSUED | PAID | VOIDED
+    +pay()
+    +voidInvoice()
+  }
+  class TranscriptEntry <<entity>> {
+    status: IN_PROGRESS | WITHDRAWN
+  }
+  class FinalizationRepository <<gateway>>
+}
+
+RegistrationCli ..> RegistrationFacade : uses
+RegistrationCli ..> RegistrationAdminFacade : uses
+RegistrationCli --> RegistrationSystem
+RegistrationSystem ..> RegistrationFacade : creates
+RegistrationSystem ..> RegistrationAdminFacade : creates
+
+RegistrationFacade --> ChainLogRepository
+RegistrationFacade --> ChainCompensator
+RegistrationAdminFacade --> ChainLogRepository
+RegistrationAdminFacade --> ChainCompensator
+ChainLogRepository ..> ChainRecord
+ChainRecord --> ChainStatus
+ChainRecord --> Stage
+RegistrationFacade ..> RegistrationException : throws
+
+RegistrationFacade --> EligibilityService
+RegistrationFacade --> SeatingService
+RegistrationFacade --> FinalizationService
+RegistrationAdminFacade --> EligibilityService
+RegistrationAdminFacade --> SeatingService
+RegistrationAdminFacade --> FinalizationService
+ChainCompensator --> EligibilityService
+ChainCompensator --> SeatingService
+ChainCompensator --> FinalizationService
+
+EligibilityService --> PrerequisiteChecker
+EligibilityService --> FinancialHoldChecker
+EligibilityService --> EligibilityRepository
+EligibilityRepository ..> EligibilityClearance
+
+SeatingService --> SeatAllocationPolicy
+SeatingService --> SeatRepository
+SeatRepository ..> SeatReservation
+
+FinalizationService --> TuitionCalculator
+FinalizationService --> FinalizationRepository
+FinalizationRepository ..> Invoice
+FinalizationRepository ..> TranscriptEntry
+
+note as Independence
+  A, B and C import only the JDK and their own package.
+  They never see each other or the facade; the facade
+  hands each one an opaque "reference" (the chain id).
+end note
+@enduml

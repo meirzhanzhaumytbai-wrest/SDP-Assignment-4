@@ -1,0 +1,25 @@
+@startuml chain-state-diagram
+title Life-cycle of one registration chain (persisted in the facade's chain log)
+skinparam shadowing false
+skinparam defaultFontName Arial
+
+[*] --> STARTED : intent logged before any subsystem is called
+STARTED --> REJECTED : A refuses (nothing committed)
+STARTED --> PENDING_B : A committed
+PENDING_B --> PENDING_C : B committed
+PENDING_C --> COMPLETED : C committed,\nB confirmed, A consumed
+
+STARTED --> COMPENSATING : unexpected failure / restart
+PENDING_B --> COMPENSATING : B failed -> undo A\n(or restart)
+PENDING_C --> COMPENSATING : C failed -> undo B, then A\n(or restart)
+COMPLETED --> COMPENSATING : administrator cancels\n(undo C, B, A)
+COMPENSATING --> COMPENSATED : every committed step undone,\nnewest first
+
+PENDING_B --> COMPLETED : recovery roll-forward\n(disk shows A, B, C committed)
+PENDING_C --> COMPLETED : recovery roll-forward
+STARTED --> COMPLETED : recovery roll-forward
+
+REJECTED --> [*]
+COMPENSATED --> [*]
+COMPLETED --> [*]
+@enduml
