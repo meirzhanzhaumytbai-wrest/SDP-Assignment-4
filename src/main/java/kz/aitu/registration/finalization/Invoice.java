@@ -3,16 +3,7 @@ package kz.aitu.registration.finalization;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Subsystem C entity: the tuition invoice for one student taking one course (amounts in tenge).
- *
- * <pre>
- *   ISSUED --pay------> PAID
- *   ISSUED --voidInvoice--> VOIDED
- *   PAID   --voidInvoice--> VOIDED   (refund after a cancelled registration)
- *   VOIDED is terminal
- * </pre>
- */
+
 public final class Invoice {
 
     public enum Status { ISSUED, PAID, VOIDED }
@@ -68,12 +59,10 @@ public final class Invoice {
         return isLegal(status, target);
     }
 
-    /** Unpaid money the student still owes; this is what counts against the credit limit. */
     public boolean isOutstanding() {
         return status == Status.ISSUED;
     }
 
-    /** ISSUED or PAID: the registration behind the invoice is still in force. */
     public boolean isActive() {
         return status != Status.VOIDED;
     }

@@ -1,6 +1,5 @@
 package kz.aitu.registration.facade;
 
-/** The three steps of the registration chain. */
 public enum Stage {
     A("eligibility"),
     B("seating"),

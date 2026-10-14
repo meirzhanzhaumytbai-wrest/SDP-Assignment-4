@@ -13,10 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/** Subsystem C persistence gateway: its own embedded H2 database file (invoices, accounts, transcript). */
 public class FinalizationRepository implements AutoCloseable {
 
-    /** The billing view of a student: how much may be owed at most, and the scholarship share. */
     public record Account(String studentId, long creditLimit, int scholarshipPercent) {
     }
 

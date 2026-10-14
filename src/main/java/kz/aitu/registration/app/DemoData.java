@@ -6,20 +6,7 @@ import kz.aitu.registration.seating.SeatingService;
 
 import java.util.Set;
 
-/**
- * The demo university. It is loaded straight into the three subsystems (each one is usable on its own),
- * and is chosen so that every scenario of the assignment can be reached with real input:
- *
- * <pre>
- *   S1001 Aibek     passed CS201, no debt, big credit limit      -> happy path
- *   S1002 Dana      passed CS201, credit limit only 100 000      -> C fails (limit)      -> B, then A undone
- *   S1003 Ermek     never passed CS201                           -> A rejects (prerequisite)
- *   S1004 Aigerim   owes 150 000 (hold above 100 000)            -> A rejects (financial hold)
- *   S1005 Timur     passed CS201, 50 % scholarship               -> second student for the 1-seat section
- *   CS399 has 0 seats (always full)                              -> B fails                -> A undone
- *   CS350 has exactly 1 seat                                     -> first student gets it, second one fails at B
- * </pre>
- */
+
 public final class DemoData {
 
     public static final String TERM = "2026-FALL";

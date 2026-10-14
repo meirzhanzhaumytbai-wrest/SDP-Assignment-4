@@ -16,13 +16,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Supplier;
 
-/**
- * Subsystem A persistence gateway. It talks to its own embedded H2 database file directly
- * (nobody else, and in particular not the facade, ever sees SQL).
- */
+
 public class EligibilityRepository implements AutoCloseable {
 
-    /** What subsystem A knows about a student: finished courses and money owed. */
     public record StudentStanding(String studentId, String fullName, Set<String> completedCourses,
                                   long overdueDebt) {
         public StudentStanding {

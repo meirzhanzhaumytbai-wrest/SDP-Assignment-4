@@ -11,11 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Facade 2: the narrow administrative workflow. Inspect what the three subsystems really hold for a
- * chain, compensate a chain by hand, and stage situations (full section, low credit limit, closed billing
- * office) so a failure can be provoked on demand.
- */
+
 public class RegistrationAdminFacade {
 
     private final EligibilityService eligibility;

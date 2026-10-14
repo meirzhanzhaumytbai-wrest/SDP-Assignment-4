@@ -13,10 +13,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-/** Subsystem B persistence gateway: its own embedded H2 database file, accessed directly. */
 public class SeatRepository implements AutoCloseable {
 
-    /** A course section in one term, with its capacity. */
     public record Section(String courseId, String term, int capacity, boolean open) {
     }
 
@@ -130,7 +128,6 @@ public class SeatRepository implements AutoCloseable {
         });
     }
 
-    // ---------------------------------------------------------------- plumbing
 
     public <T> T inTransaction(Supplier<T> work) {
         try {

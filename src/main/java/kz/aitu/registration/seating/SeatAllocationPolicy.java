@@ -1,6 +1,5 @@
 package kz.aitu.registration.seating;
 
-/** Pure business logic: may another seat be handed out in a section? No state, no storage. */
 public class SeatAllocationPolicy {
 
     public enum Decision { ALLOCATE, SECTION_CLOSED, SECTION_FULL }

@@ -11,14 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Facade 1: the everyday workflow. One call, {@link #register}, drives A (eligibility) -> B (seating) ->
- * C (finalization) so the client never talks to the three subsystems itself.
- *
- * <p>Every step is written to the durable chain log before and after it runs. Failures in the middle of
- * the chain are compensated from what is actually persisted (see {@link ChainCompensator}), and
- * {@link #recoverInterruptedChains()} does the same after a restart.
- */
+
 public class RegistrationFacade {
 
     private final EligibilityService eligibility;

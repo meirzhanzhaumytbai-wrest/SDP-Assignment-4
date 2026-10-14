@@ -6,10 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Subsystem B, public entry point: hand out, confirm and release seats in course sections.
- * Calls that change state take an opaque {@code reference} and are idempotent for it.
- */
+
 public class SeatingService implements AutoCloseable {
 
     @SuppressWarnings("serial")

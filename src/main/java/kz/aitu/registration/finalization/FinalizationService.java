@@ -6,11 +6,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Subsystem C, public entry point: bill the student and write the course onto the transcript.
- * Both writes happen in one transaction, so a rejected finalization leaves nothing behind.
- * State-changing calls are idempotent for the opaque {@code reference} they are given.
- */
+
 public class FinalizationService implements AutoCloseable {
 
     @SuppressWarnings("serial")
@@ -46,9 +42,7 @@ public class FinalizationService implements AutoCloseable {
         return new FinalizationService(new FinalizationRepository(databaseFile));
     }
 
-    // ---------------------------------------------------------------- the operations of the subsystem
 
-    /** Issues the invoice and the transcript entry (IN_PROGRESS) atomically. */
     public Invoice finalizeRegistration(String reference, String studentId, String courseId, String term) {
         Optional<Invoice> existing = repository.findInvoiceByReference(reference);
         if (existing.isPresent()) {
@@ -79,7 +73,6 @@ public class FinalizationService implements AutoCloseable {
         });
     }
 
-    /** ISSUED -> PAID. Idempotent. */
     public Invoice markPaid(String reference) {
         Invoice invoice = repository.findInvoiceByReference(reference).orElseThrow(() ->
                 new IllegalStateException("No invoice for reference " + reference));
@@ -91,11 +84,7 @@ public class FinalizationService implements AutoCloseable {
         return invoice;
     }
 
-    /**
-     * Voids the invoice and withdraws the transcript entry (compensation), atomically. Idempotent.
-     *
-     * @return true if anything was actually undone, false if there was nothing to undo
-     */
+
     public boolean voidRegistration(String reference) {
         return repository.inTransaction(() -> {
             boolean changed = false;

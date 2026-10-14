@@ -15,10 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * The facade's own durable chain log (its own H2 file). After a restart this is where the facade
- * learns which chains were interrupted and in which state.
- */
+
 public class ChainLogRepository implements AutoCloseable {
 
     @SuppressWarnings("serial")

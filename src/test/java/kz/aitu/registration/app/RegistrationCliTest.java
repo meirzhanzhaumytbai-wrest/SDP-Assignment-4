@@ -13,7 +13,6 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Drives the real demo application with scripted keystrokes against a fresh data directory. */
 class RegistrationCliTest {
 
     @TempDir
@@ -127,7 +126,6 @@ class RegistrationCliTest {
             var chain = new kz.aitu.registration.facade.RegistrationRequest("S1001", "CS301", DemoData.TERM);
             system.eligibility().clear("manual-ref", chain.studentId(), chain.courseId(), chain.term());
         }
-        // the clearance has no chain in the log, so recovery has nothing to do: output must still be sane
         String output = run("0");
         assertTrue(output.contains("Recovery: no interrupted chains found."));
     }

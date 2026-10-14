@@ -21,14 +21,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * The demo application. It is a CLIENT of the two facades and nothing else: it imports no subsystem class.
- *
- * <pre>
- *   mvn -q compile exec:java                      (reuses the data in ./data)
- *   mvn -q compile exec:java -Dexec.args="--reset"  (fresh demo data)
- * </pre>
- */
+
 public final class RegistrationCli {
 
     private final RegistrationSystem system;

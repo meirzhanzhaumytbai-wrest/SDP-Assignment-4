@@ -7,12 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Subsystem A, public entry point: "may this student take this course?" and "hold that permission for me".
- *
- * <p>All state-changing calls take an opaque {@code reference} and are idempotent for that reference.
- * The subsystem never learns who the caller is or what the reference means.
- */
+
 public class EligibilityService implements AutoCloseable {
 
     @SuppressWarnings("serial")

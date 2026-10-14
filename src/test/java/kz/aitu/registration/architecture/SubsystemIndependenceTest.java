@@ -16,10 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * Proves the structural rules of the design by reading the source files:
- * A, B and C know nothing about each other or about the facade, and the demo client only knows the facades.
- */
+
 class SubsystemIndependenceTest {
 
     private static final String BASE = "kz.aitu.registration.";

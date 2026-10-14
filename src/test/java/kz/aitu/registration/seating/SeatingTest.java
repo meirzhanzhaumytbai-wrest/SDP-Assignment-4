@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Subsystem B on its own: entity rules, policy, and the service over a real store. */
 class SeatingTest {
 
     @Nested

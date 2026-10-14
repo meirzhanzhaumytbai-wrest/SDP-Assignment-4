@@ -28,24 +28,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * A small test language for the registration domain, so a test reads like the story it checks:
- *
- * <pre>
- *   university.aStudent("S1").whoPassed("CS101", "CS201").withCreditLimit(100_000);
- *   university.aCourse("CS301").requiring("CS201").worth(4).withSeats(10);
- *   Attempt attempt = university.whenStudent("S1").registersFor("CS301");
- *   attempt.shouldFailAt(Stage.C).andUndo(Stage.B, Stage.A);
- *   university.chainOf(attempt).hasSeat("RELEASED").hasClearance("REVOKED").hasNoInvoice();
- * </pre>
- *
- * Every scenario lives in its own directory, so tests never share state.
- */
+
 public final class UniversityScenario implements AutoCloseable {
 
     public static final String TERM = "2026-FALL";
 
-    /** Decides which concrete service objects are built on top of the stores (to plug in faults). */
     public interface Wiring {
         default EligibilityService eligibility(EligibilityRepository repository) {
             return new EligibilityService(repository);
@@ -93,9 +80,7 @@ public final class UniversityScenario implements AutoCloseable {
                 new ChainLogRepository(directory.resolve("facade")));
     }
 
-    // ------------------------------------------------------------------------------------ restart
 
-    /** Closes every store and opens them again from disk: what a process restart does. */
     public UniversityScenario restart() {
         return restartWith(new Wiring() { });
     }
@@ -200,7 +185,6 @@ public final class UniversityScenario implements AutoCloseable {
         }
     }
 
-    // ------------------------------------------------------------------------------------ when
 
     public Registering whenStudent(String studentId) {
         return new Registering(studentId);
@@ -227,7 +211,6 @@ public final class UniversityScenario implements AutoCloseable {
         }
     }
 
-    /** The outcome of one registration, with assertions phrased as sentences. */
     public static final class Attempt {
         private final RegistrationReceipt receipt;
         private final RegistrationException failure;
@@ -277,7 +260,6 @@ public final class UniversityScenario implements AutoCloseable {
         }
     }
 
-    // ------------------------------------------------------------------------------------ then
 
     public ChainAssertions chainOf(Attempt attempt) {
         return chainWithId(attempt.chainId());
@@ -287,7 +269,6 @@ public final class UniversityScenario implements AutoCloseable {
         return new ChainAssertions(system.admin().inspect(chainId));
     }
 
-    /** The only chain in the log (for tests where a crash prevented a normal result). */
     public ChainRecord onlyChain() {
         List<ChainRecord> chains = system.admin().listChains();
         assertEquals(1, chains.size(), "expected exactly one chain in the log");
@@ -298,7 +279,6 @@ public final class UniversityScenario implements AutoCloseable {
         return system.seating().seatsLeft(courseId, TERM);
     }
 
-    /** What A, B and C really hold on disk for one chain, as assertions. */
     public static final class ChainAssertions {
         private final ChainInspection view;
 
@@ -354,7 +334,6 @@ public final class UniversityScenario implements AutoCloseable {
         }
     }
 
-    // ------------------------------------------------------------------------------------ access
 
     public RegistrationFacade facade() {
         return system.registration();

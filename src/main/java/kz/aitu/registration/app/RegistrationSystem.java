@@ -9,15 +9,7 @@ import kz.aitu.registration.seating.SeatingService;
 
 import java.nio.file.Path;
 
-/**
- * Composition root: the only place that knows how the three subsystems, the chain log and the two facades
- * are wired together. Clients (the CLI) only ever receive the two facades from here.
- *
- * <p>Layout on disk, one embedded H2 database per subsystem plus the facade's own chain log:
- * <pre>
- *   data/eligibility.mv.db   data/seating.mv.db   data/finalization.mv.db   data/facade.mv.db
- * </pre>
- */
+
 public final class RegistrationSystem implements AutoCloseable {
 
     private final EligibilityService eligibility;

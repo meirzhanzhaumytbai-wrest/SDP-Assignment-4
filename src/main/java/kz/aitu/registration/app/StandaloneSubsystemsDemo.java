@@ -12,10 +12,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.stream.Stream;
 
-/**
- * Shows that A, B and C are each usable on their own, with no facade and no other subsystem
- * (run this class's main method; it works in a throw-away temporary directory).
- */
+
 public final class StandaloneSubsystemsDemo {
 
     private StandaloneSubsystemsDemo() {

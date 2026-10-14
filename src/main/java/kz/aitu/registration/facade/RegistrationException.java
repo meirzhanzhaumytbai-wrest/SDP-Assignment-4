@@ -3,18 +3,13 @@ package kz.aitu.registration.facade;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Everything that can go wrong with a registration, as seen by the client of the facade. */
 @SuppressWarnings("serial")
 public class RegistrationException extends RuntimeException {
 
     public enum Kind {
-        /** The request itself was unusable; nothing was started. */
         INVALID_REQUEST,
-        /** Step A refused the request; nothing had been committed, so nothing needed undoing. */
         REJECTED,
-        /** Step B or C failed after earlier steps had committed; the committed part was undone. */
         COMPENSATED,
-        /** The undo itself failed half way; the chain stays COMPENSATING and is finished on recovery. */
         COMPENSATION_INCOMPLETE
     }
 
@@ -65,6 +60,5 @@ public class RegistrationException extends RuntimeException {
     public Kind kind() { return kind; }
     public String chainId() { return chainId; }
     public Stage failedStage() { return failedStage; }
-    /** The steps that were undone, in the order they were undone. */
     public List<Stage> undone() { return undone; }
 }

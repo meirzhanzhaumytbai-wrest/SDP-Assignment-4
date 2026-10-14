@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** The facade's everyday workflow, driven through the test language. Each test gets its own fresh stores. */
 class RegistrationFacadeTest {
 
     @TempDir
@@ -39,7 +38,6 @@ class RegistrationFacadeTest {
         university.close();
     }
 
-    // ---------------------------------------------------------------- the happy path
 
     @Test
     @DisplayName("a good request goes through A, B and C and leaves every subsystem committed and confirmed")
@@ -60,7 +58,6 @@ class RegistrationFacadeTest {
         assertEquals(80_000, attempt.receipt().tuitionKzt());
     }
 
-    // ---------------------------------------------------------------- A refuses: nothing committed, nothing to undo
 
     @Test
     @DisplayName("missing prerequisite: rejected at A, chain REJECTED, B and C were never touched")
@@ -96,7 +93,6 @@ class RegistrationFacadeTest {
         assertEquals(9, university.seatsLeftIn("CS301"));   // the first seat is still the only one in use
     }
 
-    // ---------------------------------------------------------------- B fails after A committed: A alone is undone
 
     @Test
     @DisplayName("B fails (section full) after A committed: only A is undone")
@@ -133,7 +129,6 @@ class RegistrationFacadeTest {
         university.whenStudent("S1").registersFor("CS350").shouldSucceed();
     }
 
-    // ---------------------------------------------------------------- C fails after A and B: B, then A
 
     @Test
     @DisplayName("C fails (credit limit) after A and B committed: B is undone first, then A")
@@ -166,7 +161,6 @@ class RegistrationFacadeTest {
         university.whenStudent("S1").registersFor("CS350").shouldSucceed();
     }
 
-    // ---------------------------------------------------------------- invalid input
 
     @Test
     void invalidRequestsAreRefusedBeforeAnythingIsStored() {

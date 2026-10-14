@@ -3,17 +3,7 @@ package kz.aitu.registration.seating;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Subsystem B entity: one seat in one course section, held for one student.
- *
- * <pre>
- *   HELD --confirm--> CONFIRMED
- *   HELD --release--> RELEASED
- *   CONFIRMED --release--> RELEASED   (the student dropped the course)
- *   RELEASED is terminal
- * </pre>
- * The entity enforces these transitions itself; callers cannot bypass them.
- */
+
 public final class SeatReservation {
 
     public enum Status { HELD, CONFIRMED, RELEASED }
@@ -64,7 +54,6 @@ public final class SeatReservation {
         return isLegal(status, target);
     }
 
-    /** A seat that is HELD or CONFIRMED counts against the capacity of the section. */
     public boolean occupiesSeat() {
         return status != Status.RELEASED;
     }

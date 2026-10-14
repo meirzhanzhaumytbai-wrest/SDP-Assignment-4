@@ -30,11 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * "The process dies in the middle of a chain." A crash is simulated by an Error thrown from inside a
- * subsystem (the facade only catches RuntimeException, exactly like a real kill gives it no chance to react),
- * then every store is closed and re-opened from disk and recovery decides from what is really persisted.
- */
+
 class CrashRecoveryTest {
 
     @TempDir
@@ -66,7 +62,6 @@ class CrashRecoveryTest {
                 new RegistrationRequest("S1", "CS301", UniversityScenario.TERM)));
     }
 
-    // ---------------------------------------------------------------- crash windows
 
     @Test
     @DisplayName("crash before C: log says PENDING_C, A and B are on disk -> after restart B then A are undone")
@@ -201,7 +196,6 @@ class CrashRecoveryTest {
         assertEquals(1, university.seatsLeftIn("CS301"));
     }
 
-    // ---------------------------------------------------------------- an undo that fails without a crash
 
     @Test
     @DisplayName("an undo that throws leaves the chain COMPENSATING (reported to the client) and a later recovery heals it")
@@ -269,7 +263,6 @@ class CrashRecoveryTest {
         university.chainWithId(chainId).hasUndone(Stage.B, Stage.A);
     }
 
-    // ---------------------------------------------------------------- recovery decides from disk, not from the log
 
     @Test
     @DisplayName("the log lags behind the disk: A, B and C all committed but the log says STARTED -> rolled forward")

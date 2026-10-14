@@ -3,10 +3,7 @@ package kz.aitu.registration.finalization;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Subsystem C entity: one line on the student's transcript.
- * IN_PROGRESS --withdraw--> WITHDRAWN (terminal).
- */
+
 public final class TranscriptEntry {
 
     public enum Status { IN_PROGRESS, WITHDRAWN }

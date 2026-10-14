@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/** Subsystem C on its own: entities, calculator, and the service over a real store. */
 class FinalizationTest {
 
     @Nested

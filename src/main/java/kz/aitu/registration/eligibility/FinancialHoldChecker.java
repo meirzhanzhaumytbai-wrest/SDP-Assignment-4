@@ -1,9 +1,6 @@
 package kz.aitu.registration.eligibility;
 
-/**
- * Pure business logic: a student whose overdue debt is strictly above the threshold has a financial hold
- * and may not register for anything. (Amounts are in tenge.)
- */
+
 public class FinancialHoldChecker {
 
     public static final long DEFAULT_THRESHOLD = 100_000L;

@@ -3,20 +3,7 @@ package kz.aitu.registration.eligibility;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * Subsystem A entity: the permission ("clearance") for one student to take one course in one term.
- *
- * <p>The entity owns its life-cycle and refuses illegal transitions on its own, no matter who calls it:
- * <pre>
- *   CLEARED --consume--> CONSUMED
- *   CLEARED --revoke---> REVOKED
- *   CONSUMED --revoke--> REVOKED   (registration was cancelled later)
- *   REVOKED  is terminal
- * </pre>
- *
- * <p>{@code reference} is an opaque correlation key given by whoever calls the subsystem. The subsystem does
- * not know what it means (it is the facade's chain id), it only uses it to make calls idempotent.
- */
+
 public final class EligibilityClearance {
 
     public enum Status { CLEARED, CONSUMED, REVOKED }

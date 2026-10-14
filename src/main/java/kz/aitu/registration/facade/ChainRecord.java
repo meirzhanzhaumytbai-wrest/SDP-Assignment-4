@@ -5,11 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * One row of the facade's durable chain log. The id doubles as the opaque {@code reference} handed to
- * every subsystem, which is how the facade later finds "its" records inside A, B and C.
- * Clients can read it; only the facade package can change it.
- */
+
 public final class ChainRecord {
 
     private final String id;
